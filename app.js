@@ -1,11 +1,24 @@
-const express = require("express");
-const app = express();
-const router = express.Router();
-const port = "3000";
-const routes = require("./route");
+const express = require("express")
+const app = express()
+const router = express.Router()
+const mysql = require("mysql")
+const routes = require("./route")
+const settings = require("./settings")
 
-router.get("/teams", routes.employees.listAllEmployees);
+const connection = mysql.createConnection(settings.dataBase)
 
-app.use("/api", router);
+router.get("/teams", routes.employees.listAllEmployees)
 
-app.listen(port, () => console.log(`Server started at port ${port}`));
+app.use("/api", router)
+
+connection.connect((error) => {
+  if (error) {
+    console.log("Connection db error", error)
+    return process.exit()
+  } else {
+    app.locals.connection = connection
+    app.listen(settings.APIServerPort, () =>
+      console.log(`Server started at port ${settings.APIServerPort}`)
+    )
+  }
+})
