@@ -5,20 +5,19 @@ const mysql = require("mysql")
 const routes = require("./route")
 const settings = require("./settings")
 
-const connection = mysql.createConnection(settings.dataBase)
+// const connection = mysql.createConnection(settings.dataBase)
 
 router.get("/teams", routes.employees.listAllEmployees)
 
 app.use("/api", router)
 
-connection.connect((error) => {
-  if (error) {
-    console.log("Connection db error", error)
-    return process.exit()
-  } else {
-    app.locals.connection = connection
-    app.listen(settings.APIServerPort, () =>
-      console.log(`Server started at port ${settings.APIServerPort}`)
-    )
-  }
+const knex = require("knex")({
+  client: "mysql",
+  connection: settings.dataBase,
 })
+
+app.locals.knex = knex
+
+app.listen(settings.APIServerPort, () =>
+  console.log(`Server started at port ${settings.APIServerPort}`)
+)
