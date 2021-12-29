@@ -8,6 +8,7 @@ const settings = require("./settings")
 // const connection = mysql.createConnection(settings.dataBase)
 
 router.get("/teams", routes.employees.listAllEmployees)
+router.get("/teams/:id", routes.employees.listEmployee)
 
 app.use("/api", router)
 
