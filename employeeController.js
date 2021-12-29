@@ -45,7 +45,7 @@ const listEmployee = (req, res) => {
       if (data.length > 0) {
         return res.status(200).json(data)
       } else {
-        return res.status(404).json(`No users found ${id} not found`)
+        return res.status(404).json(`No users found. ${id} is not found`)
       }
     })
     .catch((err) => {
